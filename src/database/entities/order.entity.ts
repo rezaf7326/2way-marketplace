@@ -11,7 +11,7 @@ import {
   ForeignKey,
   BelongsTo,
 } from 'sequelize-typescript';
-import { OrderItem, Product, User } from '.';
+import { OrderProduct, Product, User } from '.';
 
 @Table({
   tableName: 'Orders',
@@ -30,7 +30,7 @@ export class Order extends Model<Order> {
   @BelongsTo(() => User)
   buyer: User;
 
-  @BelongsToMany(() => Product, () => OrderItem)
+  @BelongsToMany(() => Product, () => OrderProduct)
   products!: Product[];
 
   @CreatedAt

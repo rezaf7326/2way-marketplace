@@ -2,7 +2,7 @@ import { Bootable, Singleton } from 'src/common/abstraction';
 import { StaticImplements } from 'src/common/custom-decorators';
 import { Logger } from 'src/common/logger/logger';
 import { Sequelize } from 'sequelize-typescript';
-import { User } from './entities';
+import { Order, OrderProduct, Product, User } from './entities';
 
 @StaticImplements<Singleton<Database>>()
 export class Database implements Bootable {
@@ -28,7 +28,7 @@ export class Database implements Bootable {
       username: 'your_username',
       password: 'your_password',
       host: '127.0.0.1',
-      models: [User], // Or [__dirname + '/models'] to include all models in the models folder
+      models: [User, Product, Order, OrderProduct],
     });
     this.logger.debug('database connected');
   }

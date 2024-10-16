@@ -8,10 +8,10 @@ import {
 import { Product, Order } from '.';
 
 @Table({
-  tableName: 'OrderItems',
+  tableName: 'OrderProducts',
   timestamps: false,
 })
-export class OrderItem extends Model<OrderItem> {
+export class OrderProduct extends Model<OrderProduct> {
   @ForeignKey(() => Order)
   @Column(DataType.INTEGER)
   orderId!: number;
