@@ -1,6 +1,6 @@
 'use strict';
-
-const { UserStatus } = require('src/common/enums');
+import { DataTypes } from 'sequelize';
+const { UserStatus } = require('../../common/enums');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -14,7 +14,7 @@ module.exports = {
       defaultValue: UserStatus.Created,
     });
     await queryInterface.addColumn('Users', 'lastLogin', {
-      type: DataType.DATE,
+      type: DataTypes.DATE,
       allowNull: true,
     });
   },
