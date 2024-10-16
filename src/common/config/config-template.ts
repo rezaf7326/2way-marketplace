@@ -2,8 +2,10 @@ import { IsOptional } from 'class-validator';
 import {
   GeneralConfig,
   LoggerConfig,
-  PostgresConfig,
   SwaggerConfig,
+  PostgresConfig,
+  RabbitMQConfig,
+  RedisConfig,
 } from './configs';
 
 export class ConfigTemplate {
@@ -12,6 +14,12 @@ export class ConfigTemplate {
 
   @IsOptional()
   pg: PostgresConfig;
+
+  @IsOptional()
+  rabbitmq: RabbitMQConfig;
+
+  @IsOptional()
+  redis: RedisConfig;
 
   @IsOptional()
   logger: LoggerConfig;

@@ -23,6 +23,8 @@ export class ConfigContainer {
         logger: this.loggerConfig(),
         swagger: this.swaggerConfig(),
         pg: this.postgresConfig(),
+        rabbitmq: this.rabbitmqConfig(),
+        redis: this.redisConfig(),
       } as T;
     }
     if (validationClass && this.notValidated) {
@@ -95,5 +97,13 @@ export class ConfigContainer {
       password: process.env.MARIADB_PASSWORD,
       database: process.env.MARIADB_DB_NAME,
     };
+  }
+
+  private static rabbitmqConfig(): ConfigTemplate['rabbitmq'] {
+    return { url: process.env.RMQ_URL };
+  }
+
+  private static redisConfig(): ConfigTemplate['redis'] {
+    return { url: process.env.REDIS_URL };
   }
 }

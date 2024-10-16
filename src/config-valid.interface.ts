@@ -6,6 +6,8 @@ import {
   GeneralConfig,
   SwaggerConfig,
   PostgresConfig,
+  RedisConfig,
+  RabbitMQConfig,
 } from './common/config/configs';
 
 export class ConfigValidInterface extends ConfigTemplate {
@@ -18,6 +20,16 @@ export class ConfigValidInterface extends ConfigTemplate {
   @ValidateNested()
   @Type(() => PostgresConfig)
   pg: PostgresConfig;
+
+  @IsNotEmpty()
+  @ValidateNested()
+  @Type(() => RabbitMQConfig)
+  rabbitmq: RabbitMQConfig;
+
+  @IsNotEmpty()
+  @ValidateNested()
+  @Type(() => RedisConfig)
+  redis: RedisConfig;
 
   @IsNotEmpty()
   @ValidateNested()
