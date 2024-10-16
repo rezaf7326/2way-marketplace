@@ -9,7 +9,8 @@ import { Config } from './config';
 export class Database implements Bootable {
   private static instance: Database;
   private readonly logger: Logger;
-  private connection: Sequelize;
+
+  public connection: Sequelize;
 
   private constructor() {
     this.logger = new Logger(this.constructor.name);
@@ -29,9 +30,5 @@ export class Database implements Bootable {
       models: [User, Product, Order, OrderProduct],
     });
     this.logger.debug('database connected');
-  }
-
-  repository<T>(model: new () => Model<T>) {
-    return this.connection.getRepository(model);
   }
 }

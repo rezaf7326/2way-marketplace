@@ -8,6 +8,7 @@ import {
   CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
+import { UserStatus } from 'src/common/enums';
 
 @Table({
   tableName: 'Users',
@@ -40,6 +41,12 @@ export class User extends Model<User> {
 
   @Column({
     type: DataType.STRING,
+    allowNull: false,
+  })
+  passwordHash!: string;
+
+  @Column({
+    type: DataType.STRING,
     allowNull: true,
     unique: true,
   })
@@ -50,6 +57,18 @@ export class User extends Model<User> {
     allowNull: false,
   })
   role!: string;
+
+  @Column({
+    type: DataType.STRING,
+    defaultValue: UserStatus.Created,
+  })
+  status!: UserStatus;
+
+  @Column({
+    type: DataType.DATE,
+    allowNull: true,
+  })
+  lastLogin: Date;
 
   @CreatedAt
   @Column(DataType.DATE)
