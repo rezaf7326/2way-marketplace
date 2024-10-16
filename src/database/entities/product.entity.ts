@@ -10,7 +10,7 @@ import {
   ForeignKey,
   BelongsTo,
 } from 'sequelize-typescript';
-import { ProductStatus } from 'src/common/enums';
+import { ProductStatus } from '../../common/enums';
 import { User } from './user.entity';
 
 @Table({

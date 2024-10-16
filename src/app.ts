@@ -4,7 +4,6 @@ import * as bodyParser from 'body-parser';
 import { Logger } from './common/logger/logger';
 import { ConfigContainer } from './common/config';
 import { ErrorRequestHandler, Router } from 'express';
-import { ConfigValidInterface } from './config-valid.interface';
 
 export class App {
   private readonly app: express.Express;
@@ -36,12 +35,10 @@ export class App {
   }
 
   start() {
-    this.app.listen(
-      ConfigContainer.config(ConfigValidInterface).general.port,
-      () =>
-        this.logger.info(
-          `server is listening on port ${ConfigContainer.config().general.port}`,
-        ),
+    this.app.listen(ConfigContainer.config().general.port, () =>
+      this.logger.info(
+        `server is listening on port ${ConfigContainer.config().general.port}`,
+      ),
     );
   }
 

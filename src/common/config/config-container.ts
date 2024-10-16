@@ -91,11 +91,11 @@ export class ConfigContainer {
 
   private static postgresConfig(): ConfigTemplate['pg'] {
     return {
-      host: process.env.MARIADB_HOST,
-      port: Number(process.env.MARIADB_PORT),
-      username: process.env.MARIADB_USERNAME,
-      password: process.env.MARIADB_PASSWORD,
-      database: process.env.MARIADB_DB_NAME,
+      host: process.env.PG_HOST,
+      port: Number(process.env.PG_PORT),
+      username: process.env.PG_USERNAME,
+      password: process.env.PG_PASSWORD,
+      database: process.env.PG_DB_NAME,
     };
   }
 

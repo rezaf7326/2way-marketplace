@@ -1,13 +1,15 @@
-import { Bootable, Singleton } from 'src/common/abstraction';
-import { StaticImplements } from 'src/common/custom-decorators';
-import { Logger } from 'src/common/logger/logger';
-import { Sequelize } from 'sequelize-typescript';
+import { Bootable, Singleton } from '../common/abstraction';
+import { StaticImplements } from '../common/custom-decorators';
+import { Logger } from '../common/logger/logger';
+import { Sequelize, Model } from 'sequelize-typescript';
 import { Order, OrderProduct, Product, User } from './entities';
+import { Config } from './config';
 
 @StaticImplements<Singleton<Database>>()
 export class Database implements Bootable {
   private static instance: Database;
   private readonly logger: Logger;
+  private connection: Sequelize;
 
   private constructor() {
     this.logger = new Logger(this.constructor.name);
@@ -22,14 +24,14 @@ export class Database implements Bootable {
 
   async boot() {
     this.logger.info('initializing database connection');
-    new Sequelize({
-      database: 'your_database',
-      dialect: 'postgres',
-      username: 'your_username',
-      password: 'your_password',
-      host: '127.0.0.1',
+    this.connection = new Sequelize({
+      ...Config,
       models: [User, Product, Order, OrderProduct],
     });
     this.logger.debug('database connected');
+  }
+
+  repository<T>(model: new () => Model<T>) {
+    return this.connection.getRepository(model);
   }
 }

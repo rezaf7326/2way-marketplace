@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "start": "ts-node src/main.ts",
+    "start:dev": "nodemon src/main.ts",
+    "start:prod": "node dist/main.js",
+    "migration:generate": "npx sequelize-cli migration:generate --migrations-path ./src/database/migrations --name new-migration",
+    "migration:run": "npm run build && npx sequelize-cli db:migrate --migrations-path ./dist/database/migrations --config ./dist/database/config.js"
   },
   "author": "",
   "license": "ISC",
@@ -13,6 +18,7 @@
     "class-transformer-validator": "^0.9.1",
     "class-validator": "^0.14.1",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "fast-safe-stringify": "^2.1.1",
     "http-errors": "^2.0.0",
