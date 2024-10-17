@@ -2,7 +2,11 @@ import { Role, Route } from '../common/enums';
 import { Logger } from '../common/logger/logger';
 import { NextFunction, Response, Router } from 'express';
 import { Bootable, Singleton, ValidRequest } from '../common/abstraction';
-import { withQueriesMiddleware, WithUserRoleMiddleware } from '../middlewares';
+import {
+  withAuthenticatedUserMiddleware,
+  withQueriesMiddleware,
+  WithUserRoleMiddleware,
+} from '../middlewares';
 import { StaticImplements } from '../common/custom-decorators';
 import { ProductService } from '../services/product.service';
 import { CreateProductDto } from '../dtos';
@@ -29,6 +33,7 @@ export class ProductController implements Bootable {
 
     router.get(
       Route.Product,
+      withAuthenticatedUserMiddleware(),
       withQueriesMiddleware({
         page: (val: unknown) => (val ? +val > 0 : true),
         size: (val: unknown) => (val ? +val > 0 : true),
@@ -40,6 +45,7 @@ export class ProductController implements Bootable {
 
     router.post(
       Route.Product,
+      withAuthenticatedUserMiddleware(),
       WithUserRoleMiddleware(Role.Seller),
       this.create.bind(this),
     );

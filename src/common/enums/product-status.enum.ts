@@ -1,6 +1,6 @@
 export enum ProductStatus {
-  Pending = 'pending',
-  Cancelled = 'cancelled', // by seller
-  Disapproved = 'disapproved', // by approver
-  Approved = 'approved',
+  Pending = 'Pending',
+  Cancelled = 'Cancelled', // by seller
+  Disapproved = 'Disapproved', // by approver
+  Approved = 'Approved',
 }

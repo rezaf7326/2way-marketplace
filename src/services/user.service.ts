@@ -37,7 +37,7 @@ export class UserService {
       status: UserStatus.Created,
       passwordHash: await CryptoHelper.hash(user.password),
     });
-    const newUser = result.toJSON();
+    const newUser = result?.toJSON();
     delete newUser.passwordHash;
     this.logger.info(`successfully created user: ${JSON.stringify(newUser)}`);
 
@@ -48,7 +48,8 @@ export class UserService {
     where: Partial<{ email: string; id: number }>,
   ): Promise<Omit<User, 'passwordHash'> | null> {
     this.logger.debug(`find user: ${JSON.stringify(where)}`);
-    const user = await this.userRepository.findOne({ where });
+    const result = await this.userRepository.findOne({ where });
+    const user = result?.toJSON();
     user && delete user.passwordHash;
 
     return user;
