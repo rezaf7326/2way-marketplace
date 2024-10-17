@@ -16,13 +16,13 @@ async function bootstrap() {
   const router = Router();
   ConfigContainer.config(ConfigValidInterface); // validate .env
 
-  Database.ref.boot();
-  RabbitMQ.ref.boot();
-  RabbitMQ.ref.assertQueue(ConfigContainer.get('NOTIFICATION_QUEUE'));
-  HealthCheckController.ref.boot(router);
-  AuthController.ref.boot(router);
-  UserController.ref.boot(router);
-  ProductController.ref.boot(router);
+  await Database.ref.boot();
+  await RabbitMQ.ref.boot();
+  await RabbitMQ.ref.assertQueue(ConfigContainer.get('NOTIFICATION_QUEUE'));
+  await HealthCheckController.ref.boot(router);
+  await AuthController.ref.boot(router);
+  await UserController.ref.boot(router);
+  await ProductController.ref.boot(router);
 
   app.cors();
   app.router(router);

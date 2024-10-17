@@ -9,8 +9,8 @@ import { StaticImplements } from '../common/custom-decorators';
 import { Pagination, PaginationMetadata } from '../common/pagination';
 import { RabbitMQ } from '../rabbitmq/rabbitmq';
 import { ConfigContainer } from '../common/config';
-import { RMQEvent } from 'src/common/enums';
-import { Listing } from 'src/database/entities/listing.entity';
+import { RMQEvent } from '../common/enums';
+import { Listing } from '../database/entities/listing.entity';
 import { UserService } from './user.service';
 
 @StaticImplements<Singleton<ProductService>>()

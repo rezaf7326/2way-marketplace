@@ -4,6 +4,7 @@ import { Logger } from '../common/logger/logger';
 import { Sequelize, Model } from 'sequelize-typescript';
 import { Order, OrderProduct, Product, User } from './entities';
 import { ConfigContainer } from '../common/config';
+import { Listing } from './entities/listing.entity';
 
 @StaticImplements<Singleton<Database>>()
 export class Database implements Bootable {
@@ -32,7 +33,7 @@ export class Database implements Bootable {
       password: ConfigContainer.config().pg.password,
       host: ConfigContainer.config().pg.host,
       port: ConfigContainer.config().pg.port,
-      models: [User, Product, Order, OrderProduct],
+      models: [User, Product, Order, OrderProduct, Listing],
     });
     this.logger.debug('database initialized');
   }
