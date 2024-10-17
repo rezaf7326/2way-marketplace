@@ -5,7 +5,7 @@ import { ConfigValidInterface } from '../config-valid.interface';
 
 ConfigContainer.config(ConfigValidInterface); // validate .env
 
-export const Config: SequelizeOptions = {
+const Config: SequelizeOptions = {
   dialect: 'postgres',
   database: ConfigContainer.config().pg.database,
   username: ConfigContainer.config().pg.username,

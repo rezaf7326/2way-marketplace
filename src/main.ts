@@ -8,6 +8,7 @@ import { Database } from './database/database';
 import { AuthController } from './controllers/auth.controller';
 import { UserController } from './controllers/user.controller';
 import { HealthCheckController } from './controllers/health-check.controller';
+import { ProductController } from './controllers/product.controller';
 
 async function bootstrap() {
   const app = new App();
@@ -18,6 +19,7 @@ async function bootstrap() {
   HealthCheckController.ref.boot(router);
   AuthController.ref.boot(router);
   UserController.ref.boot(router);
+  ProductController.ref.boot(router);
 
   app.cors();
   app.router(router);

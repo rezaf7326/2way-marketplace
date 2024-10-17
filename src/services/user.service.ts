@@ -4,7 +4,7 @@ import { Database } from '../database/database';
 import { Logger } from '../common/logger/logger';
 import { Singleton } from '../common/abstraction';
 import { StaticImplements } from '../common/custom-decorators';
-import { UserStatus } from '../common/enums';
+import { Role, UserStatus } from '../common/enums';
 import { CryptoHelper } from '../common/helpers/crypto.helper';
 import { SignUpDto } from '../dtos';
 
@@ -46,6 +46,11 @@ export class UserService {
   findOne(where: Partial<{ email: string; id: number }>): Promise<User | null> {
     this.logger.debug(`find user: ${JSON.stringify(where)}`);
     return this.userRepository.findOne({ where });
+  }
+
+  async hasRole(userId: number, role: Role): Promise<boolean> {
+    const user = await this.userRepository.findByPk(userId);
+    return user?.role === role;
   }
 
   async isAccountActivated(userId: number): Promise<boolean> {

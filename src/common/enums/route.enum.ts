@@ -5,4 +5,6 @@ export enum Route {
 
   AuthLogin = '/auth/login',
   AuthLogout = '/auth/logout',
+
+  Product = '/product',
 }

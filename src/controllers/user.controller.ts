@@ -1,7 +1,10 @@
-import { dtoValidationMiddleware } from '../middlewares';
+import {
+  dtoValidationMiddleware,
+  withAuthenticatedUserMiddleware,
+} from '../middlewares';
 import { Route } from '../common/enums';
 import { Logger } from '../common/logger/logger';
-import { Conflict } from 'http-errors';
+import { Conflict, NotFound } from 'http-errors';
 import { Bootable, Singleton, ValidRequest } from '../common/abstraction';
 import { NextFunction, Response, Router } from 'express';
 import { StaticImplements } from '../common/custom-decorators';
@@ -33,6 +36,13 @@ export class UserController implements Bootable {
       this.signUp.bind(this),
     );
     this.logger.info(`registered POST ${Route.User}`);
+
+    router.get(
+      Route.User,
+      withAuthenticatedUserMiddleware(),
+      this.findOne.bind(this),
+    );
+    this.logger.info(`registered GET ${Route.User}`);
   }
 
   async signUp(
@@ -50,6 +60,25 @@ export class UserController implements Bootable {
       this.logger.info(
         `successfully signed-up new user with email: ${body.email}`,
       );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async findOne(
+    { user: { sub } }: ValidRequest,
+    res: Response,
+    next: NextFunction,
+  ) {
+    this.logger.verbose(`find one user ${sub}`);
+    try {
+      const user = await UserService.ref.findOne({ id: +sub });
+      if (!user) {
+        return next(new NotFound(`user not found: ${sub}`));
+      }
+      user.status = Number(user.status);
+      res.status(200).send(user);
+      this.logger.info(`successfully found user: ${sub}`);
     } catch (error) {
       next(error);
     }

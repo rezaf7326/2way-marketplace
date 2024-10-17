@@ -3,7 +3,7 @@ import { StaticImplements } from '../common/custom-decorators';
 import { Logger } from '../common/logger/logger';
 import { Sequelize, Model } from 'sequelize-typescript';
 import { Order, OrderProduct, Product, User } from './entities';
-import { Config } from './config';
+import { ConfigContainer } from '../common/config';
 
 @StaticImplements<Singleton<Database>>()
 export class Database implements Bootable {
@@ -26,10 +26,14 @@ export class Database implements Bootable {
   async boot() {
     this.logger.info('initializing database connection');
     this.connection = new Sequelize({
-      ...Config,
       dialect: 'postgres',
+      database: ConfigContainer.config().pg.database,
+      username: ConfigContainer.config().pg.username,
+      password: ConfigContainer.config().pg.password,
+      host: ConfigContainer.config().pg.host,
+      port: ConfigContainer.config().pg.port,
       models: [User, Product, Order, OrderProduct],
     });
-    this.logger.debug('database connected');
+    this.logger.debug('database initialized');
   }
 }
