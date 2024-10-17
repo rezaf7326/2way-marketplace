@@ -28,7 +28,7 @@ export class UserService {
 
   async createUser(user: SignUpDto): Promise<Omit<User, 'passwordHash'>> {
     this.logger.debug(`create user with email: ${user.email}`);
-    const newUser = await this.userRepository.create({
+    const result = await this.userRepository.create({
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
@@ -37,6 +37,7 @@ export class UserService {
       status: UserStatus.Created,
       passwordHash: await CryptoHelper.hash(user.password),
     });
+    const newUser = result.toJSON();
     delete newUser.passwordHash;
     this.logger.info(`successfully created user: ${JSON.stringify(newUser)}`);
 
