@@ -27,6 +27,7 @@ export class Database implements Bootable {
     this.logger.info('initializing database connection');
     this.connection = new Sequelize({
       ...Config,
+      dialect: 'postgres',
       models: [User, Product, Order, OrderProduct],
     });
     this.logger.debug('database connected');

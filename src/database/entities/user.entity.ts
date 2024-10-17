@@ -8,7 +8,7 @@ import {
   CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
-import { UserStatus } from 'src/common/enums';
+import { UserStatus } from '../../common/enums';
 
 @Table({
   tableName: 'Users',
