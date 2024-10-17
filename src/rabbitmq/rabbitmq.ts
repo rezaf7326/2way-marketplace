@@ -2,7 +2,9 @@ import * as amqp from 'amqplib';
 import { ConfigContainer } from '../common/config';
 import { Bootable, Singleton } from '../common/abstraction';
 import { StaticImplements } from '../common/custom-decorators';
+import { ListingNotificationMsgDto, OrderNotificationMsgDto } from '../dtos';
 import { Logger } from '../common/logger/logger';
+import { RMQEvent } from '../common/enums';
 
 @StaticImplements<Singleton<RabbitMQ>>()
 export class RabbitMQ implements Bootable {
@@ -37,7 +39,18 @@ export class RabbitMQ implements Bootable {
     this.logger.debug(`queue "${queue}" is ready`);
   }
 
-  sendMessage(queue: string, event: string, body: any): boolean {
+  sendMessage(
+    queue: string,
+    event: RMQEvent,
+    body: ListingNotificationMsgDto | OrderNotificationMsgDto,
+  ): boolean {
+    this.logger.debug(
+      `sending amqp message: ${JSON.stringify({
+        queue,
+        event,
+        body,
+      })}`,
+    );
     const buffer = Buffer.from(JSON.stringify({ event, body }));
     return this.channel.sendToQueue(queue, buffer);
   }

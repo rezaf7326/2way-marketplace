@@ -7,4 +7,8 @@ export enum Route {
   AuthLogout = '/auth/logout',
 
   Product = '/product',
+  ProductListing = '/product/listing',
+  ProductListingId = '/product/listing/:id',
+  ProductOrder = '/product/order',
+  ProductOrderId = '/product/order/:id',
 }
