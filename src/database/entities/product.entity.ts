@@ -12,6 +12,7 @@ import {
 } from 'sequelize-typescript';
 import { ProductStatus } from '../../common/enums';
 import { User } from './user.entity';
+import { Listing } from './listing.entity';
 
 @Table({
   tableName: 'Products',
@@ -64,6 +65,13 @@ export class Product extends Model<Product> {
 
   @BelongsTo(() => User)
   seller: User;
+
+  @ForeignKey(() => Listing)
+  @Column(DataType.INTEGER)
+  listingId: number;
+
+  @BelongsTo(() => Listing)
+  listing: Listing;
 
   @CreatedAt
   @Column(DataType.DATE)
