@@ -26,7 +26,7 @@ export class UserService {
     return this.instance;
   }
 
-  async createUser(user: SignUpDto): Promise<User> {
+  async createUser(user: SignUpDto): Promise<Omit<User, 'passwordHash'>> {
     this.logger.debug(`create user with email: ${user.email}`);
     const newUser = await this.userRepository.create({
       firstName: user.firstName,
@@ -43,9 +43,14 @@ export class UserService {
     return newUser;
   }
 
-  findOne(where: Partial<{ email: string; id: number }>): Promise<User | null> {
+  async findOne(
+    where: Partial<{ email: string; id: number }>,
+  ): Promise<Omit<User, 'passwordHash'> | null> {
     this.logger.debug(`find user: ${JSON.stringify(where)}`);
-    return this.userRepository.findOne({ where });
+    const user = await this.userRepository.findOne({ where });
+    user && delete user.passwordHash;
+
+    return user;
   }
 
   async hasRole(userId: number, role: Role): Promise<boolean> {

@@ -1,6 +1,7 @@
-import { Product } from '../database/entities';
+import { User } from 'src/database/entities';
 
 export class ListingNotificationMsgDto {
   type: 'new' | 'cancel';
-  products: Array<Product['id']>;
+  listingId: number;
+  seller: Omit<User, 'passwordHash'>;
 }

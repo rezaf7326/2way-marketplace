@@ -6,6 +6,7 @@ import { withQueriesMiddleware, WithUserRoleMiddleware } from '../middlewares';
 import { StaticImplements } from '../common/custom-decorators';
 import { ProductService } from '../services/product.service';
 import { CreateProductDto } from '../dtos';
+import { BadRequest } from 'http-errors';
 
 @StaticImplements<Singleton<ProductController>>()
 export class ProductController implements Bootable {
@@ -68,6 +69,11 @@ export class ProductController implements Bootable {
   ) {
     this.logger.verbose('create products');
     try {
+      if (body.some(({ sellerId }) => sellerId !== body[0].sellerId)) {
+        throw new BadRequest(
+          'invalid listing, all products must have the same sellerId',
+        );
+      }
       const newProducts = await ProductService.ref.create(body);
       res.status(201).send(newProducts);
       this.logger.info(

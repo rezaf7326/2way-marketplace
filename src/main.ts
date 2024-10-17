@@ -9,6 +9,7 @@ import { AuthController } from './controllers/auth.controller';
 import { UserController } from './controllers/user.controller';
 import { HealthCheckController } from './controllers/health-check.controller';
 import { ProductController } from './controllers/product.controller';
+import { RabbitMQ } from './rabbitmq/rabbitmq';
 
 async function bootstrap() {
   const app = new App();
@@ -16,6 +17,8 @@ async function bootstrap() {
   ConfigContainer.config(ConfigValidInterface); // validate .env
 
   Database.ref.boot();
+  RabbitMQ.ref.boot();
+  RabbitMQ.ref.assertQueue(ConfigContainer.get('NOTIFICATION_QUEUE'));
   HealthCheckController.ref.boot(router);
   AuthController.ref.boot(router);
   UserController.ref.boot(router);
