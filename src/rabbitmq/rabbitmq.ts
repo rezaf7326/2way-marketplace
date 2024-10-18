@@ -45,7 +45,7 @@ export class RabbitMQ implements Bootable {
     body: ListingNotificationMsgDto | OrderNotificationMsgDto,
   ): boolean {
     this.logger.debug(
-      `sending amqp message: ${JSON.stringify({
+      `send amqp message: ${JSON.stringify({
         queue,
         event,
         body,

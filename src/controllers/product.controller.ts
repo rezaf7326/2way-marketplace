@@ -3,13 +3,14 @@ import { Logger } from '../common/logger/logger';
 import { NextFunction, Response, Router } from 'express';
 import { Bootable, Singleton, ValidRequest } from '../common/abstraction';
 import {
+  BlockUserRoleMiddleware,
   withAuthenticatedUserMiddleware,
   withQueriesMiddleware,
   WithUserRoleMiddleware,
 } from '../middlewares';
 import { StaticImplements } from '../common/custom-decorators';
 import { ProductService } from '../services/product.service';
-import { CreateProductDto } from '../dtos';
+import { CreateProductDto, OrderProductDto } from '../dtos';
 import { BadRequest } from 'http-errors';
 
 @StaticImplements<Singleton<ProductController>>()
@@ -37,19 +38,55 @@ export class ProductController implements Bootable {
       withQueriesMiddleware({
         page: (val: unknown) => (val ? +val > 0 : true),
         size: (val: unknown) => (val ? +val > 0 : true),
-        search: () => true, // optional - no validation
+        search: () => true,
       }),
       this.find.bind(this),
     );
     this.logger.info(`registered GET ${Route.Product}`);
 
     router.post(
-      Route.Product,
+      Route.ProductListing,
       withAuthenticatedUserMiddleware(),
       WithUserRoleMiddleware(Role.Seller),
       this.create.bind(this),
     );
-    this.logger.info(`registered POST ${Route.Product}`);
+    this.logger.info(`registered POST ${Route.ProductListing}`);
+
+    router.get(
+      Route.ProductListing,
+      withAuthenticatedUserMiddleware(),
+      BlockUserRoleMiddleware(Role.Buyer),
+      withQueriesMiddleware({
+        page: (val: unknown) => (val ? +val > 0 : true),
+        size: (val: unknown) => (val ? +val > 0 : true),
+        search: () => true,
+        by: (val: unknown) => (val ? +val > 0 : true), // seller id
+      }),
+      this.findListings.bind(this),
+    );
+    this.logger.info(`registered GET ${Route.ProductListing}`);
+
+    router.post(
+      Route.ProductOrder,
+      withAuthenticatedUserMiddleware(),
+      WithUserRoleMiddleware(Role.Buyer),
+      this.createOrder.bind(this),
+    );
+    this.logger.info(`registered POST ${Route.ProductOrder}`);
+
+    router.get(
+      Route.ProductOrder,
+      withAuthenticatedUserMiddleware(),
+      BlockUserRoleMiddleware(Role.Approver),
+      withQueriesMiddleware({
+        page: (val: unknown) => (val ? +val > 0 : true),
+        size: (val: unknown) => (val ? +val > 0 : true),
+        search: () => true,
+        by: (val: unknown) => (val ? +val > 0 : true), // buyer id (useful for sellers to filter)
+      }),
+      this.findOrders.bind(this),
+    );
+    this.logger.info(`registered GET ${Route.ProductOrder}`);
   }
 
   async find(req: ValidRequest, res: Response, next: NextFunction) {
@@ -88,5 +125,33 @@ export class ProductController implements Bootable {
     } catch (error) {
       next(error);
     }
+  }
+
+  async findListings(req: ValidRequest, res: Response, next: NextFunction) {
+    this.logger.verbose('find listings');
+    // {
+    //   size: req.query.size ? Number(req.query.size) : undefined,
+    //   page: req.query.page ? Number(req.query.page) : undefined,
+    //   search: req.query.search ? (req.query.search as string) : undefined,
+    //   by: req.query.by ? Number(req.query.by) : undefined,
+    // }
+  }
+
+  async createOrder(
+    { body }: ValidRequest<Array<OrderProductDto>>,
+    res: Response,
+    next: NextFunction,
+  ) {
+    this.logger.verbose('create new order');
+  }
+
+  async findOrders(req: ValidRequest, res: Response, next: NextFunction) {
+    this.logger.verbose('find orders');
+    // {
+    //   size: req.query.size ? Number(req.query.size) : undefined,
+    //   page: req.query.page ? Number(req.query.page) : undefined,
+    //   search: req.query.search ? (req.query.search as string) : undefined,
+    //   by: req.query.by ? Number(req.query.by) : undefined,
+    // }
   }
 }
